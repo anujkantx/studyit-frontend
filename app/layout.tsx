@@ -1,4 +1,3 @@
-import GoogleProvider from "./providers/GoogleProvider";
 import "./globals.css";
 
 export default function RootLayout({
@@ -8,10 +7,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <GoogleProvider>
-          {children}
-        </GoogleProvider>
+      <body className="min-h-screen bg-[radial-gradient(circle_at_top,_#f8fafc,_#e2e8f0_42%,_#cbd5e1)] text-slate-900 antialiased">
+        {children}
       </body>
     </html>
   );
