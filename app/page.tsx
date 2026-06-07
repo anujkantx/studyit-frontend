@@ -22,7 +22,7 @@ export default function Home() {
 
           <div className="flex flex-col gap-4 sm:flex-row">
             <Link
-              href="/login"
+              href="auth/google"
               className="inline-flex items-center justify-center rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-950/15 transition hover:-translate-y-0.5 hover:bg-slate-800"
             >
               Continue with Google

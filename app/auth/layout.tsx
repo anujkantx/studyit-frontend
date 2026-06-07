@@ -1,4 +1,4 @@
-import GoogleProvider from "../providers/GoogleProvider";
+import GoogleProvider from "./providers/GoogleProvider";
 
 export default function AuthLayout({
   children,
