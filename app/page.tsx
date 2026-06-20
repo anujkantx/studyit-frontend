@@ -1,86 +1,576 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import {
+  FaArrowRight,
+  FaBookOpen,
+  FaChartLine,
+  FaCircleCheck,
+  FaChevronDown,
+  FaGraduationCap,
+  FaMagnifyingGlass,
+  FaRegCalendarCheck,
+  FaRegCircleQuestion,
+  FaRocket,
+  FaRegFileLines,
+  FaRegNoteSticky,
+  FaRobot,
+  FaShieldHeart,
+} from "react-icons/fa6";
+
+const TRUST_BADGES = [
+  "1000+ Study Resources",
+  "University Specific",
+  "AI Powered Learning",
+  "Semester Focused",
+];
+
+const UNIVERSITIES = [
+  { name: "AKTU", programs: 12, subjects: 240, resources: "8.5k+" },
+  { name: "IPU", programs: 10, subjects: 210, resources: "7.2k+" },
+  { name: "MDU", programs: 9, subjects: 184, resources: "6.1k+" },
+  { name: "RTU", programs: 8, subjects: 166, resources: "5.8k+" },
+  { name: "JNTU", programs: 14, subjects: 278, resources: "9.4k+" },
+  { name: "Anna University", programs: 13, subjects: 296, resources: "10k+" },
+];
+
+const HOW_IT_WORKS = [
+  {
+    title: "Choose University",
+    description: "Select your university and program.",
+    icon: FaGraduationCap,
+  },
+  {
+    title: "Select Semester",
+    description: "Access semester-specific content.",
+    icon: FaBookOpen,
+  },
+  {
+    title: "Start Learning",
+    description: "Learn using notes, PYQs, quizzes and AI tools.",
+    icon: FaRocket,
+  },
+];
+
+const FEATURES = [
+  { title: "Notes", description: "Well-organized semester notes.", icon: FaRegNoteSticky },
+  { title: "PYQs", description: "Previous year exam papers.", icon: FaRegFileLines },
+  { title: "Quizzes", description: "Practice and self-assessment.", icon: FaCircleCheck },
+  { title: "AI Tutor", description: "Ask doubts instantly.", icon: FaRobot },
+  { title: "Study Planner", description: "Personalized study roadmap.", icon: FaRegCalendarCheck },
+  { title: "Progress Tracking", description: "Monitor your preparation.", icon: FaChartLine },
+];
+
+const SUBJECTS = [
+  "DBMS",
+  "Operating System",
+  "Computer Networks",
+  "OOPS",
+  "DAA",
+  "Machine Learning",
+  "Software Engineering",
+  "AI",
+];
+
+const TESTIMONIALS = [
+  {
+    name: "Aman Verma",
+    university: "AKTU",
+    review:
+      "Studyit saved me hours every week. Everything for semester prep is already organized and easy to access.",
+  },
+  {
+    name: "Priya Sharma",
+    university: "IPU",
+    review:
+      "The PYQs + AI Tutor combo helped me revise faster before internals. It feels made for our actual syllabus.",
+  },
+  {
+    name: "Rohit Nair",
+    university: "Anna University",
+    review:
+      "Clean interface, quality notes, and quizzes in one place. It finally feels like a premium student platform.",
+  },
+];
+
+const FAQS = [
+  {
+    question: "Which universities are supported?",
+    answer: "We currently support AKTU, IPU, MDU, RTU, JNTU, Anna University and are onboarding more every month.",
+  },
+  {
+    question: "Is Studyit free?",
+    answer: "Yes. The Free plan includes limited notes, PYQs and quizzes to help you explore the platform.",
+  },
+  {
+    question: "How does Premium work?",
+    answer: "Premium unlocks advanced AI tools, deeper quizzes, analytics, and full access to semester resources.",
+  },
+  {
+    question: "Can I access multiple semesters?",
+    answer: "You can switch semesters from the dashboard. Access scope depends on your selected plan and package.",
+  },
+  {
+    question: "How does AI Tutor work?",
+    answer: "AI Tutor gives subject-specific explanations, revision help and doubt solving aligned to your selected semester.",
+  },
+];
+
+const SECTION_IN_VIEW = { once: true, amount: 0.25 };
+
+function Section({ id, children, className = "" }: { id?: string; children: React.ReactNode; className?: string }) {
+  return (
+    <motion.section
+      id={id}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={SECTION_IN_VIEW}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className={className}
+    >
+      {children}
+    </motion.section>
+  );
+}
 
 export default function Home() {
+  const [activeTestimonial, setActiveTestimonial] = useState(0);
+  const [openFaq, setOpenFaq] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveTestimonial((prev) => (prev + 1) % TESTIMONIALS.length);
+    }, 4200);
+
+    return () => clearInterval(timer);
+  }, []);
+
   return (
-    <main className="mx-auto flex min-h-screen max-w-6xl items-center px-6 py-16">
-      <section className="grid w-full gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:gap-12">
-        <div className="flex flex-col justify-center space-y-8">
-          <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/70 bg-white/70 px-4 py-2 text-sm font-medium text-slate-700 shadow-sm backdrop-blur">
-            <span className="h-2 w-2 rounded-full bg-emerald-500" />
-            Smart study hub for notes, PYQs, quizzes, and premium access
-          </div>
+    <main className="bg-white text-[#0F172A]">
+      <header className="sticky top-0 z-50 border-b border-[#E2E8F0] bg-white/80 backdrop-blur-xl">
+        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
+          <Link href="/" className="text-2xl font-semibold tracking-tight text-[#0F172A]">
+            Studyit
+          </Link>
 
-          <div className="space-y-5">
-            <h1 className="max-w-2xl text-5xl font-semibold tracking-tight text-slate-950 sm:text-6xl">
-              Study smarter, revise faster, and stay organized.
-            </h1>
+          <nav className="hidden items-center gap-8 text-sm font-medium text-[#64748B] md:flex">
+            <a href="#features" className="transition hover:text-[#4F46E5]">Features</a>
+            <a href="#universities" className="transition hover:text-[#4F46E5]">Universities</a>
+            <a href="#pricing" className="transition hover:text-[#4F46E5]">Pricing</a>
+            <a href="#resources" className="transition hover:text-[#4F46E5]">Resources</a>
+          </nav>
 
-            <p className="max-w-xl text-lg leading-8 text-slate-600">
-              Studyit brings your notes, practice questions, and subject materials into one clean workspace so you can focus on learning instead of hunting files.
-            </p>
-          </div>
-
-          <div className="flex flex-col gap-4 sm:flex-row">
-            <Link
-              href="auth/google"
-              className="inline-flex items-center justify-center rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-950/15 transition hover:-translate-y-0.5 hover:bg-slate-800"
-            >
-              Continue with Google
+          <div className="flex items-center gap-3">
+            <Link href="/auth/google" className="rounded-full px-4 py-2 text-sm font-medium text-[#64748B] transition hover:text-[#0F172A]">
+              Login
             </Link>
-
             <Link
-              href="/dashboard"
-              className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white/80 px-6 py-3 text-sm font-semibold text-slate-800 backdrop-blur transition hover:-translate-y-0.5 hover:border-slate-400"
+              href="/auth/google"
+              className="rounded-full bg-[#4F46E5] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-600/25 transition hover:-translate-y-0.5 hover:bg-indigo-600"
             >
-              Explore dashboard
+              Get Started
             </Link>
-          </div>
-
-          <div className="grid gap-4 pt-2 sm:grid-cols-3">
-            {[
-              ["Notes", "Quick access to structured learning material."],
-              ["PYQs", "Practice with previous year questions."],
-              ["Quizzes", "Test yourself with short focused quizzes."],
-            ].map(([title, description]) => (
-              <div key={title} className="rounded-2xl border border-white/70 bg-white/75 p-4 shadow-sm backdrop-blur">
-                <h2 className="text-sm font-semibold text-slate-950">{title}</h2>
-                <p className="mt-1 text-sm leading-6 text-slate-600">{description}</p>
-              </div>
-            ))}
           </div>
         </div>
+      </header>
 
-        <div className="relative flex items-center justify-center lg:justify-end">
-          <div className="absolute inset-0 -z-10 mx-auto h-80 w-80 rounded-full bg-cyan-300/40 blur-3xl" />
-          <div className="w-full max-w-md rounded-[2rem] border border-white/70 bg-white/85 p-8 shadow-2xl shadow-slate-900/10 backdrop-blur-xl">
-            <div className="space-y-4">
-              <div className="inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">
-                Live study space
-              </div>
-              <h2 className="text-2xl font-semibold text-slate-950">Everything you need in one place</h2>
-              <p className="text-sm leading-6 text-slate-600">
-                A focused experience for students who want a clean landing page, fast login, and clear learning paths.
+      <div className="mx-auto max-w-7xl space-y-28 px-6 py-12 md:py-20">
+        <Section className="grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:items-center">
+          <div className="space-y-8">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-2 text-sm font-medium text-[#64748B]">
+              <FaShieldHeart className="text-[#22C55E]" />
+              Trusted by students across universities
+            </div>
+
+            <div className="space-y-5">
+              <h1 className="text-4xl font-semibold leading-tight tracking-tight sm:text-5xl md:text-6xl">
+                Placement ke liye Skills. <br /> Semester ke liye Studyit.
+              </h1>
+              <p className="max-w-2xl text-lg leading-8 text-[#64748B]">
+                Access Notes, PYQs, Quizzes and AI-powered learning tools tailored to your university, program and semester.
               </p>
             </div>
 
-            <div className="mt-8 space-y-4">
-              {[
-                ["Google sign-in", "Secure access with a single tap"],
-                ["Personal dashboard", "Keep your learning organized"],
-                ["Premium ready", "Easy path to paid content"],
-              ].map(([title, description]) => (
-                <div key={title} className="flex items-start gap-3 rounded-2xl bg-slate-50 p-4">
-                  <div className="mt-1 h-2.5 w-2.5 rounded-full bg-slate-950" />
-                  <div>
-                    <div className="text-sm font-semibold text-slate-950">{title}</div>
-                    <div className="text-sm text-slate-600">{description}</div>
-                  </div>
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <Link
+                href="/auth/google"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#4F46E5] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-600/25 transition hover:-translate-y-0.5 hover:bg-indigo-600"
+              >
+                Get Started Free <FaArrowRight />
+              </Link>
+              <a
+                href="#universities"
+                className="inline-flex items-center justify-center rounded-full border border-[#E2E8F0] bg-white px-6 py-3 text-sm font-semibold text-[#0F172A] shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+              >
+                Browse Universities
+              </a>
+            </div>
+
+            <div className="grid gap-3 pt-2 sm:grid-cols-2">
+              {TRUST_BADGES.map((badge) => (
+                <div key={badge} className="flex items-center gap-2 rounded-2xl border border-[#E2E8F0] bg-white p-3 text-sm text-[#64748B]">
+                  <FaCircleCheck className="text-[#22C55E]" /> {badge}
                 </div>
               ))}
             </div>
           </div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.97 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={SECTION_IN_VIEW}
+            transition={{ duration: 0.5 }}
+            className="relative"
+          >
+            <div className="rounded-[20px] border border-[#E2E8F0] bg-[#F8FAFC] p-5 shadow-xl shadow-slate-900/5 md:p-6">
+              <div className="mb-4 grid grid-cols-3 gap-3">
+                {[
+                  "AKTU",
+                  "B.Tech CSE",
+                  "Semester 4",
+                ].map((value) => (
+                  <div key={value} className="rounded-2xl border border-[#E2E8F0] bg-white px-3 py-2 text-xs font-medium text-[#64748B]">
+                    {value}
+                  </div>
+                ))}
+              </div>
+
+              <div className="mb-4 flex items-center gap-2 rounded-2xl border border-[#E2E8F0] bg-white px-4 py-3 text-sm text-[#64748B]">
+                <FaMagnifyingGlass /> Search subjects, notes, PYQs...
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2">
+                {["DBMS", "Operating Systems", "DAA", "Computer Networks"].map((subject) => (
+                  <div key={subject} className="rounded-2xl border border-[#E2E8F0] bg-white p-4">
+                    <h3 className="text-sm font-semibold">{subject}</h3>
+                    <p className="mt-1 text-xs text-[#64748B]">Notes • PYQs • Quiz • AI Tutor</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-4 rounded-2xl border border-indigo-100 bg-indigo-50 p-4 text-sm text-indigo-900">
+                <div className="font-semibold">Premium Plan</div>
+                <div className="text-xs text-indigo-700">Expires on 20 Aug 2026 • AI Tutor Active</div>
+              </div>
+            </div>
+
+            {[
+              { label: "📚 Notes", position: "-left-2 top-12" },
+              { label: "📝 PYQs", position: "right-0 top-4" },
+              { label: "🤖 AI Tutor", position: "-left-3 bottom-20" },
+              { label: "🎯 Quiz", position: "right-4 bottom-6" },
+            ].map((item, idx) => (
+              <motion.div
+                key={item.label}
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 2 + idx * 0.3, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+                className={`absolute ${item.position} hidden rounded-2xl border border-[#E2E8F0] bg-white px-3 py-2 text-xs font-semibold text-[#0F172A] shadow-md md:block`}
+              >
+                {item.label}
+              </motion.div>
+            ))}
+          </motion.div>
+        </Section>
+
+        <Section id="universities" className="space-y-8">
+          <div className="space-y-3 text-center">
+            <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">Find Your University</h2>
+            <p className="text-[#64748B]">Choose your university and start learning instantly.</p>
+          </div>
+
+          <div className="mx-auto flex max-w-3xl items-center gap-2 rounded-[20px] border border-[#E2E8F0] bg-white px-4 py-4 shadow-sm">
+            <FaMagnifyingGlass className="text-[#64748B]" />
+            <input
+              placeholder="Search universities..."
+              className="w-full border-0 bg-transparent text-sm text-[#0F172A] outline-none placeholder:text-[#94A3B8]"
+            />
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {UNIVERSITIES.map((item) => (
+              <div key={item.name} className="rounded-[20px] border border-[#E2E8F0] bg-[#F8FAFC] p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+                <h3 className="text-lg font-semibold">{item.name}</h3>
+                <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs text-[#64748B]">
+                  <div className="rounded-xl bg-white p-2"><p className="font-semibold text-[#0F172A]">{item.programs}</p>Programs</div>
+                  <div className="rounded-xl bg-white p-2"><p className="font-semibold text-[#0F172A]">{item.subjects}</p>Subjects</div>
+                  <div className="rounded-xl bg-white p-2"><p className="font-semibold text-[#0F172A]">{item.resources}</p>Resources</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        <Section className="space-y-10">
+          <div className="space-y-3 text-center">
+            <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">Start Learning In 3 Simple Steps</h2>
+          </div>
+
+          <div className="relative grid gap-4 md:grid-cols-3">
+            <div className="absolute top-1/2 hidden h-px w-full -translate-y-1/2 bg-gradient-to-r from-transparent via-indigo-200 to-transparent md:block" />
+            {HOW_IT_WORKS.map((item, index) => {
+              const Icon = item.icon;
+              return (
+                <div key={item.title} className="relative rounded-[20px] border border-[#E2E8F0] bg-white p-6 shadow-sm">
+                  <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50 text-[#4F46E5]">
+                    <Icon />
+                  </div>
+                  <p className="mb-2 text-xs font-semibold tracking-[0.18em] text-[#94A3B8]">STEP {index + 1}</p>
+                  <h3 className="text-xl font-semibold">{item.title}</h3>
+                  <p className="mt-2 text-sm text-[#64748B]">{item.description}</p>
+                </div>
+              );
+            })}
+          </div>
+        </Section>
+
+        <Section id="features" className="space-y-8">
+          <div className="space-y-3 text-center">
+            <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">Everything You Need To Ace Your Semester</h2>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {FEATURES.map((feature) => {
+              const Icon = feature.icon;
+              return (
+                <div
+                  key={feature.title}
+                  className="rounded-[20px] border border-white/60 bg-white/70 p-6 shadow-lg shadow-slate-900/5 backdrop-blur-md transition hover:-translate-y-1 hover:shadow-xl"
+                >
+                  <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-50 text-[#4F46E5]">
+                    <Icon />
+                  </div>
+                  <h3 className="text-xl font-semibold">{feature.title}</h3>
+                  <p className="mt-2 text-sm text-[#64748B]">{feature.description}</p>
+                </div>
+              );
+            })}
+          </div>
+        </Section>
+
+        <Section className="space-y-8">
+          <div className="space-y-3 text-center">
+            <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">Built For Serious Students</h2>
+          </div>
+
+          <div className="grid gap-6 rounded-[20px] border border-[#E2E8F0] bg-[#F8FAFC] p-6 lg:grid-cols-[1.3fr_0.7fr]">
+            <div className="rounded-[18px] border border-[#E2E8F0] bg-white p-5 shadow-sm">
+              <div className="mb-4 grid grid-cols-2 gap-3">
+                {["Semester-wise subjects", "Smart search", "Subscription management", "AI learning assistant"].map((label) => (
+                  <div key={label} className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-3 text-sm font-medium text-[#334155]">
+                    {label}
+                  </div>
+                ))}
+              </div>
+              <div className="grid gap-3 sm:grid-cols-3">
+                {["Notes access", "PYQ access", "Progress tracking"].map((label) => (
+                  <div key={label} className="rounded-xl bg-indigo-50 p-3 text-sm text-indigo-700">
+                    {label}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="space-y-3">
+              {["Semester-wise subjects", "Smart search", "Subscription management", "AI assistant", "Notes/PYQ access", "Progress tracking"].map((callout) => (
+                <div key={callout} className="rounded-2xl border border-[#E2E8F0] bg-white p-3 text-sm text-[#64748B] shadow-sm">
+                  <span className="font-semibold text-[#0F172A]">•</span> {callout}
+                </div>
+              ))}
+            </div>
+          </div>
+        </Section>
+
+        <Section id="resources" className="space-y-8">
+          <div className="space-y-3 text-center">
+            <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">Popular Subjects</h2>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {SUBJECTS.map((subject) => (
+              <div key={subject} className="rounded-[20px] border border-[#E2E8F0] bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+                <h3 className="text-lg font-semibold">{subject}</h3>
+                <p className="mt-3 text-sm text-[#64748B]">Notes • PYQs • Quiz</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        <Section className="space-y-8">
+          <div className="space-y-3 text-center">
+            <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">Why Students Love Studyit</h2>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            {[
+              ["Save Time", "No more searching through Telegram groups."],
+              ["Score Better", "Focused semester preparation."],
+              ["Everything In One Place", "Single platform for complete preparation."],
+            ].map(([title, text]) => (
+              <div key={title} className="rounded-[20px] border border-[#E2E8F0] bg-[#F8FAFC] p-6 shadow-sm">
+                <h3 className="text-xl font-semibold">{title}</h3>
+                <p className="mt-2 text-sm text-[#64748B]">{text}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        <Section id="pricing" className="space-y-8">
+          <div className="space-y-3 text-center">
+            <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">Simple Pricing</h2>
+          </div>
+
+          <div className="grid gap-4 lg:grid-cols-3">
+            {[
+              { tier: "Free", price: "₹0", items: ["Limited Notes", "Limited PYQs", "Starter Quizzes"] },
+              { tier: "Basic", price: "₹199/mo", items: ["Full Semester Notes", "PYQs", "Subject Resources"] },
+              {
+                tier: "Premium",
+                price: "₹399/mo",
+                items: ["Everything in Basic", "AI tools", "Advanced quizzes + analytics"],
+                highlight: true,
+              },
+            ].map((plan) => (
+              <div
+                key={plan.tier}
+                className={`rounded-[20px] border p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg ${
+                  plan.highlight
+                    ? "border-indigo-200 bg-indigo-50/70 shadow-indigo-300/20"
+                    : "border-[#E2E8F0] bg-white"
+                }`}
+              >
+                <h3 className="text-xl font-semibold">{plan.tier}</h3>
+                <p className="mt-2 text-3xl font-semibold">{plan.price}</p>
+                <ul className="mt-4 space-y-2 text-sm text-[#64748B]">
+                  {plan.items.map((item) => (
+                    <li key={item} className="flex items-start gap-2"><FaCircleCheck className="mt-0.5 text-[#22C55E]" /> {item}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <a href="#" className="inline-flex items-center justify-center rounded-full bg-[#4F46E5] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-600/25 transition hover:bg-indigo-600">
+              View Full Pricing
+            </a>
+          </div>
+        </Section>
+
+        <Section className="space-y-8">
+          <div className="space-y-3 text-center">
+            <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">Testimonials</h2>
+          </div>
+
+          <div className="mx-auto max-w-3xl rounded-[20px] border border-[#E2E8F0] bg-white p-6 shadow-sm">
+            <motion.div
+              key={TESTIMONIALS[activeTestimonial].name}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35 }}
+            >
+              <div className="mb-4 flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 font-semibold text-indigo-700">
+                  {TESTIMONIALS[activeTestimonial].name
+                    .split(" ")
+                    .map((part) => part[0])
+                    .join("")
+                    .slice(0, 2)}
+                </div>
+                <div>
+                  <p className="font-semibold">{TESTIMONIALS[activeTestimonial].name}</p>
+                  <p className="text-sm text-[#64748B]">{TESTIMONIALS[activeTestimonial].university}</p>
+                </div>
+              </div>
+              <p className="text-lg leading-8 text-[#334155]">“{TESTIMONIALS[activeTestimonial].review}”</p>
+            </motion.div>
+
+            <div className="mt-6 flex items-center justify-center gap-2">
+              {TESTIMONIALS.map((item, index) => (
+                <button
+                  key={item.name}
+                  onClick={() => setActiveTestimonial(index)}
+                  className={`h-2.5 w-6 rounded-full transition ${
+                    index === activeTestimonial ? "bg-[#4F46E5]" : "bg-slate-200 hover:bg-slate-300"
+                  }`}
+                  aria-label={`Show testimonial ${index + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+        </Section>
+
+        <Section className="space-y-8">
+          <div className="space-y-3 text-center">
+            <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">FAQ</h2>
+          </div>
+
+          <div className="mx-auto max-w-3xl space-y-3">
+            {FAQS.map((faq, index) => (
+              <div key={faq.question} className="rounded-2xl border border-[#E2E8F0] bg-white p-4 shadow-sm">
+                <button
+                  onClick={() => setOpenFaq((prev) => (prev === index ? -1 : index))}
+                  className="flex w-full items-center justify-between gap-3 text-left"
+                >
+                  <span className="flex items-center gap-2 text-sm font-semibold sm:text-base">
+                    <FaRegCircleQuestion className="text-[#4F46E5]" />
+                    {faq.question}
+                  </span>
+                  <FaChevronDown
+                    className={`shrink-0 text-[#64748B] transition ${openFaq === index ? "rotate-180" : ""}`}
+                  />
+                </button>
+                {openFaq === index && <p className="mt-3 text-sm leading-7 text-[#64748B]">{faq.answer}</p>}
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        <Section>
+          <div className="rounded-[24px] bg-gradient-to-r from-slate-950 via-indigo-900 to-slate-900 px-6 py-14 text-center text-white shadow-2xl shadow-indigo-900/30 md:px-10">
+            <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">Ready To Ace Your Semester?</h2>
+            <p className="mx-auto mt-4 max-w-2xl text-sm text-indigo-100 md:text-base">
+              Everything you need to learn, revise and score better.
+            </p>
+            <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+              <Link href="/auth/google" className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition hover:-translate-y-0.5">
+                Get Started Free
+              </Link>
+              <a href="#universities" className="rounded-full border border-white/40 px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white/10">
+                Explore Universities
+              </a>
+            </div>
+          </div>
+        </Section>
+      </div>
+
+      <footer className="border-t border-[#E2E8F0] bg-[#F8FAFC]">
+        <div className="mx-auto grid max-w-7xl gap-10 px-6 py-12 text-sm text-[#64748B] md:grid-cols-5">
+          <div className="md:col-span-1">
+            <h3 className="text-lg font-semibold text-[#0F172A]">Studyit</h3>
+            <p className="mt-2">University-specific learning SaaS for focused semester prep.</p>
+          </div>
+
+          {[
+            ["Product", ["Features", "Pricing", "AI Tutor"]],
+            ["Resources", ["Universities", "Notes", "PYQs"]],
+            ["Company", ["About", "Contact"]],
+            ["Legal", ["Privacy Policy", "Terms"]],
+          ].map(([title, items]) => (
+            <div key={title}>
+              <h4 className="font-semibold text-[#0F172A]">{title}</h4>
+              <ul className="mt-3 space-y-2">
+                {(items as string[]).map((item) => (
+                  <li key={item}>
+                    <a href="#" className="transition hover:text-[#4F46E5]">{item}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
-      </section>
+        <div className="border-t border-[#E2E8F0] px-6 py-5 text-center text-xs text-[#64748B]">© 2026 Studyit. All rights reserved.</div>
+      </footer>
     </main>
   );
 }
