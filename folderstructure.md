@@ -1,6 +1,9 @@
 # Frontend Folder Structure
 
 ```text
+# Frontend Folder Structure
+
+```text
 frontend/
 ├── .env.local
 ├── .gitignore
@@ -14,6 +17,7 @@ frontend/
 │   │       └── page.tsx
 │   ├── admin/
 │   │   ├── dashboard/
+│   │   │   ├── layout.tsx
 │   │   │   └── page.tsx
 │   │   ├── layout.tsx
 │   │   └── page.tsx
@@ -26,9 +30,9 @@ frontend/
 │   │       └── GoogleProvider.tsx
 │   ├── dashboard/
 │   │   ├── notes/
-│   │   ├── page.tsx
 │   │   ├── pyq/
-│   │   └── quiz/
+│   │   ├── quiz/
+│   │   └── page.tsx
 │   ├── globals.css
 │   ├── layout.tsx
 │   └── page.tsx
@@ -39,21 +43,30 @@ frontend/
 │   │   └── AdminUsersPanel.tsx
 │   ├── dashboard/
 │   └── landing/
+├── features/
+│   └── (examples)/
+├── shared/
+│   ├── constants/
+│   │   └── routes.ts
+│   └── ui/
+├── lib/
+│   └── api.ts
+├── services/
+│   └── admin.ts
+├── types/
 ├── eslint.config.mjs
 ├── next-env.d.ts
 ├── next.config.ts
-├── package-lock.json
 ├── package.json
+├── package-lock.json
 ├── postcss.config.mjs
 ├── README.md
-├── services/
-│   └── admin.ts
 ├── tsconfig.json
-└── types/
-```
+└── README.md
 
 Generated or local-only folders that exist in the workspace but are not expanded here:
 
-- `.git/`
-- `.next/`
-- `node_modules/`
+- .git/
+- .next/
+- node_modules/
+```

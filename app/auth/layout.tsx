@@ -1,9 +1,5 @@
 import GoogleProvider from "./providers/GoogleProvider";
 
-export default function AuthLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AuthLayout({children,}: {children: React.ReactNode;}) {
   return <GoogleProvider>{children}</GoogleProvider>;
 }
