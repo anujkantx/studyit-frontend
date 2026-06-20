@@ -5,7 +5,7 @@ export async function loginWithGoogle( credential: string ): Promise<LoginRespon
   const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/google`,
     {
       method: "POST",
-      credentials: "include",
+      credentials: "include", // Important for sending cookies. Make sure your backend CORS settings allow credentials from your frontend origin.
       headers: {
         "Content-Type": "application/json",
       },

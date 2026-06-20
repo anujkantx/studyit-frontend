@@ -1,24 +1,30 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
+import Logo from "@/public/images/studyit-logo-transparent.png";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
-  FaArrowRight,
-  FaBookOpen,
-  FaChartLine,
-  FaCircleCheck,
-  FaChevronDown,
-  FaGraduationCap,
-  FaMagnifyingGlass,
-  FaRegCalendarCheck,
-  FaRegCircleQuestion,
-  FaRocket,
-  FaRegFileLines,
-  FaRegNoteSticky,
-  FaRobot,
-  FaShieldHeart,
-} from "react-icons/fa6";
+  ArrowRight,
+  BookOpen,
+  TrendingUp,
+  CheckCircle2,
+  ChevronDown,
+  GraduationCap,
+  Search,
+  Calendar,
+  HelpCircle,
+  Rocket,
+  FileText,
+  StickyNote,
+  Bot,
+  Heart,
+  Book,
+  Target,
+} from "lucide-react";
+
+import { useRouter } from "next/navigation";
 
 const TRUST_BADGES = [
   "1000+ Study Resources",
@@ -27,51 +33,40 @@ const TRUST_BADGES = [
   "Semester Focused",
 ];
 
-const UNIVERSITIES = [
-  { name: "AKTU", programs: 12, subjects: 240, resources: "8.5k+" },
-  { name: "IPU", programs: 10, subjects: 210, resources: "7.2k+" },
-  { name: "MDU", programs: 9, subjects: 184, resources: "6.1k+" },
-  { name: "RTU", programs: 8, subjects: 166, resources: "5.8k+" },
-  { name: "JNTU", programs: 14, subjects: 278, resources: "9.4k+" },
-  { name: "Anna University", programs: 13, subjects: 296, resources: "10k+" },
-];
+// const UNIVERSITIES = [
+//   { name: "AKTU", programs: 12, subjects: 240, resources: "8.5k+" },
+//   { name: "IPU", programs: 10, subjects: 210, resources: "7.2k+" },
+//   { name: "MDU", programs: 9, subjects: 184, resources: "6.1k+" },
+//   { name: "RTU", programs: 8, subjects: 166, resources: "5.8k+" },
+//   { name: "JNTU", programs: 14, subjects: 278, resources: "9.4k+" },
+//   { name: "Anna University", programs: 13, subjects: 296, resources: "10k+" },
+// ];
 
 const HOW_IT_WORKS = [
   {
     title: "Choose University",
     description: "Select your university and program.",
-    icon: FaGraduationCap,
+    icon: GraduationCap,
   },
   {
-    title: "Select Semester",
+    title: "Select Program & Semester",
     description: "Access semester-specific content.",
-    icon: FaBookOpen,
+    icon: BookOpen,
   },
   {
     title: "Start Learning",
     description: "Learn using notes, PYQs, quizzes and AI tools.",
-    icon: FaRocket,
+    icon: Rocket,
   },
 ];
 
 const FEATURES = [
-  { title: "Notes", description: "Well-organized semester notes.", icon: FaRegNoteSticky },
-  { title: "PYQs", description: "Previous year exam papers.", icon: FaRegFileLines },
-  { title: "Quizzes", description: "Practice and self-assessment.", icon: FaCircleCheck },
-  { title: "AI Tutor", description: "Ask doubts instantly.", icon: FaRobot },
-  { title: "Study Planner", description: "Personalized study roadmap.", icon: FaRegCalendarCheck },
-  { title: "Progress Tracking", description: "Monitor your preparation.", icon: FaChartLine },
-];
-
-const SUBJECTS = [
-  "DBMS",
-  "Operating System",
-  "Computer Networks",
-  "OOPS",
-  "DAA",
-  "Machine Learning",
-  "Software Engineering",
-  "AI",
+  { title: "Notes", description: "Well-organized semester notes.", icon: StickyNote },
+  { title: "PYQs", description: "Previous year exam papers.", icon: FileText },
+  { title: "Quizzes", description: "Practice and self-assessment.", icon: CheckCircle2 },
+  { title: "AI Tutor", description: "Ask doubts instantly.", icon: Bot },
+  { title: "Study Planner", description: "Personalized study roadmap.", icon: Calendar },
+  { title: "Progress Tracking", description: "Monitor your preparation.", icon: TrendingUp },
 ];
 
 const TESTIMONIALS = [
@@ -83,13 +78,13 @@ const TESTIMONIALS = [
   },
   {
     name: "Priya Sharma",
-    university: "IPU",
+    university: "Sharda University",
     review:
       "The PYQs + AI Tutor combo helped me revise faster before internals. It feels made for our actual syllabus.",
   },
   {
     name: "Rohit Nair",
-    university: "Anna University",
+    university: "Galgotia University",
     review:
       "Clean interface, quality notes, and quizzes in one place. It finally feels like a premium student platform.",
   },
@@ -118,6 +113,13 @@ const FAQS = [
   },
 ];
 
+const FOOTER_LINKS: Array<[string, string[]]> = [
+  ["Product", ["Features", "Pricing", "AI Tutor"]],
+  ["Resources", ["Universities", "Notes", "PYQs"]],
+  ["Company", ["About", "Contact"]],
+  ["Legal", ["Privacy Policy", "Terms"]],
+];
+
 const SECTION_IN_VIEW = { once: true, amount: 0.25 };
 
 function Section({ id, children, className = "" }: { id?: string; children: React.ReactNode; className?: string }) {
@@ -135,7 +137,34 @@ function Section({ id, children, className = "" }: { id?: string; children: Reac
   );
 }
 
+
 export default function Home() {
+  const router = useRouter();
+  const handleSignIn = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/me`,
+        {
+          credentials: "include",
+        }
+      );
+  
+      if (res.ok) {
+        const user = await res.json();
+  
+        router.push(
+          user.role === "admin"
+            ? "/admin/dashboard"
+            : "/dashboard"
+        );
+  
+        return;
+      }
+    } catch {}
+  
+    router.push("/auth/google");
+  };
+  
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [openFaq, setOpenFaq] = useState(0);
 
@@ -150,28 +179,34 @@ export default function Home() {
   return (
     <main className="bg-white text-[#0F172A]">
       <header className="sticky top-0 z-50 border-b border-[#E2E8F0] bg-white/80 backdrop-blur-xl">
-        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
-          <Link href="/" className="text-2xl font-semibold tracking-tight text-[#0F172A]">
-            Studyit
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
+          <Link href="/" className="text-2xl flex font-semibold tracking-tight text-[#0F172A]">
+            <Image src={Logo} alt="Studyit Logo" className="h-8 w-8" />
+            <div className="ml-2 font-bold text-[#483ffe]">
+              Studyit
+            </div>
+
           </Link>
 
-          <nav className="hidden items-center gap-8 text-sm font-medium text-[#64748B] md:flex">
+          <nav className="hidden items-center gap-8 text-sm font-medium md:flex">
             <a href="#features" className="transition hover:text-[#4F46E5]">Features</a>
-            <a href="#universities" className="transition hover:text-[#4F46E5]">Universities</a>
             <a href="#pricing" className="transition hover:text-[#4F46E5]">Pricing</a>
-            <a href="#resources" className="transition hover:text-[#4F46E5]">Resources</a>
+            <a href="#testimonials" className="transition hover:text-[#4F46E5]">Testimonials</a>
+            <a href="#faqs" className="transition hover:text-[#4F46E5]">FAQs</a>
           </nav>
 
           <div className="flex items-center gap-3">
-            <Link href="/auth/google" className="rounded-full px-4 py-2 text-sm font-medium text-[#64748B] transition hover:text-[#0F172A]">
+            <button 
+            onClick={handleSignIn}
+             className="rounded-full px-4 py-2 text-sm font-medium text-[#64748B] transition hover:text-[#0F172A]">
               Login
-            </Link>
-            <Link
-              href="/auth/google"
+            </button>
+            <button
+              onClick={handleSignIn}
               className="rounded-full bg-[#4F46E5] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-600/25 transition hover:-translate-y-0.5 hover:bg-indigo-600"
             >
               Get Started
-            </Link>
+            </button>
           </div>
         </div>
       </header>
@@ -179,14 +214,14 @@ export default function Home() {
       <div className="mx-auto max-w-7xl space-y-28 px-6 py-12 md:py-20">
         <Section className="grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:items-center">
           <div className="space-y-8">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-2 text-sm font-medium text-[#64748B]">
-              <FaShieldHeart className="text-[#22C55E]" />
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#000000] bg-[#F8FAFC] px-4 py-2 text-sm font-medium ">
+              <Heart className="text-[#22C55E]" />
               Trusted by students across universities
             </div>
 
             <div className="space-y-5">
-              <h1 className="text-4xl font-semibold leading-tight tracking-tight sm:text-5xl md:text-6xl">
-                Placement ke liye Skills. <br /> Semester ke liye Studyit.
+              <h1 className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl md:text-6xl">
+              Everything Your Semester Needs.<br />  In One Place.
               </h1>
               <p className="max-w-2xl text-lg leading-8 text-[#64748B]">
                 Access Notes, PYQs, Quizzes and AI-powered learning tools tailored to your university, program and semester.
@@ -194,12 +229,12 @@ export default function Home() {
             </div>
 
             <div className="flex flex-col gap-3 sm:flex-row">
-              <Link
-                href="/auth/google"
+              <button
+                onClick={handleSignIn}
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-[#4F46E5] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-600/25 transition hover:-translate-y-0.5 hover:bg-indigo-600"
               >
-                Get Started Free <FaArrowRight />
-              </Link>
+                Get Started Free <ArrowRight />
+              </button>
               <a
                 href="#universities"
                 className="inline-flex items-center justify-center rounded-full border border-[#E2E8F0] bg-white px-6 py-3 text-sm font-semibold text-[#0F172A] shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
@@ -210,8 +245,8 @@ export default function Home() {
 
             <div className="grid gap-3 pt-2 sm:grid-cols-2">
               {TRUST_BADGES.map((badge) => (
-                <div key={badge} className="flex items-center gap-2 rounded-2xl border border-[#E2E8F0] bg-white p-3 text-sm text-[#64748B]">
-                  <FaCircleCheck className="text-[#22C55E]" /> {badge}
+                <div key={badge} className="flex items-center gap-2 rounded-2xl border border-[#E2E8F0] bg-zinc-50 p-3 text-sm ">
+                  <CheckCircle2 className="text-[#22C55E]" /> {badge}
                 </div>
               ))}
             </div>
@@ -224,7 +259,7 @@ export default function Home() {
             transition={{ duration: 0.5 }}
             className="relative"
           >
-            <div className="rounded-[20px] border border-[#E2E8F0] bg-[#F8FAFC] p-5 shadow-xl shadow-slate-900/5 md:p-6">
+            <div className="rounded-[20px] border border-[#d5d5d5] bg-[#F8FAFC] p-5 shadow-xl shadow-slate-900/5 md:p-6">
               <div className="mb-4 grid grid-cols-3 gap-3">
                 {[
                   "AKTU",
@@ -238,7 +273,7 @@ export default function Home() {
               </div>
 
               <div className="mb-4 flex items-center gap-2 rounded-2xl border border-[#E2E8F0] bg-white px-4 py-3 text-sm text-[#64748B]">
-                <FaMagnifyingGlass /> Search subjects, notes, PYQs...
+                <Search /> Search subjects, notes, PYQs...
               </div>
 
               <div className="grid gap-3 sm:grid-cols-2">
@@ -250,38 +285,38 @@ export default function Home() {
                 ))}
               </div>
 
-              <div className="mt-4 rounded-2xl border border-indigo-100 bg-indigo-50 p-4 text-sm text-indigo-900">
+              <div className="mt-4 rounded-2xl border border-indigo-100 bg-indigo-100 p-4 text-sm text-indigo-900">
                 <div className="font-semibold">Premium Plan</div>
-                <div className="text-xs text-indigo-700">Expires on 20 Aug 2026 • AI Tutor Active</div>
+                <div className="text-xs text-lime-700">Extra 50% OFF + AI Tutor</div>
               </div>
             </div>
 
             {[
-              { label: "📚 Notes", position: "-left-2 top-12" },
-              { label: "📝 PYQs", position: "right-0 top-4" },
-              { label: "🤖 AI Tutor", position: "-left-3 bottom-20" },
-              { label: "🎯 Quiz", position: "right-4 bottom-6" },
+              { label: "Notes", icon: Book, position: "-left-2 top-12" },
+              { label: "PYQs", icon: FileText, position: "right-0 top-4" },
+              { label: "AI Tutor", icon: Bot, position: "-left-3 bottom-20" },
+              { label: "Quiz", icon: Target, position: "right-4 bottom-6" },
             ].map((item, idx) => (
               <motion.div
                 key={item.label}
                 animate={{ y: [0, -8, 0] }}
                 transition={{ duration: 2 + idx * 0.3, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-                className={`absolute ${item.position} hidden rounded-2xl border border-[#E2E8F0] bg-white px-3 py-2 text-xs font-semibold text-[#0F172A] shadow-md md:block`}
+                className={`absolute ${item.position} hidden rounded-2xl border border-[#61a5ff] bg-white px-3 py-2 text-xs font-semibold shadow-md md:flex items-center gap-1.5`}
               >
-                {item.label}
+                <item.icon size={14} /> {item.label}
               </motion.div>
             ))}
           </motion.div>
         </Section>
 
-        <Section id="universities" className="space-y-8">
+        {/* <Section id="universities" className="space-y-8">
           <div className="space-y-3 text-center">
             <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">Find Your University</h2>
             <p className="text-[#64748B]">Choose your university and start learning instantly.</p>
           </div>
 
           <div className="mx-auto flex max-w-3xl items-center gap-2 rounded-[20px] border border-[#E2E8F0] bg-white px-4 py-4 shadow-sm">
-            <FaMagnifyingGlass className="text-[#64748B]" />
+            <Search className="text-[#64748B]" />
             <input
               placeholder="Search universities..."
               className="w-full border-0 bg-transparent text-sm text-[#0F172A] outline-none placeholder:text-[#94A3B8]"
@@ -300,7 +335,7 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </Section>
+        </Section> */}
 
         <Section className="space-y-10">
           <div className="space-y-3 text-center">
@@ -308,13 +343,13 @@ export default function Home() {
           </div>
 
           <div className="relative grid gap-4 md:grid-cols-3">
-            <div className="absolute top-1/2 hidden h-px w-full -translate-y-1/2 bg-gradient-to-r from-transparent via-indigo-200 to-transparent md:block" />
+            <div className="absolute top-1/2 hidden h-px w-full -translate-y-1/2 bg-linear-to-r from-transparent via-indigo-200 to-transparent md:block" />
             {HOW_IT_WORKS.map((item, index) => {
               const Icon = item.icon;
               return (
                 <div key={item.title} className="relative rounded-[20px] border border-[#E2E8F0] bg-white p-6 shadow-sm">
                   <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50 text-[#4F46E5]">
-                    <Icon />
+                    <Icon size={24} />
                   </div>
                   <p className="mb-2 text-xs font-semibold tracking-[0.18em] text-[#94A3B8]">STEP {index + 1}</p>
                   <h3 className="text-xl font-semibold">{item.title}</h3>
@@ -339,7 +374,7 @@ export default function Home() {
                   className="rounded-[20px] border border-white/60 bg-white/70 p-6 shadow-lg shadow-slate-900/5 backdrop-blur-md transition hover:-translate-y-1 hover:shadow-xl"
                 >
                   <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-50 text-[#4F46E5]">
-                    <Icon />
+                    <Icon size={20} />
                   </div>
                   <h3 className="text-xl font-semibold">{feature.title}</h3>
                   <p className="mt-2 text-sm text-[#64748B]">{feature.description}</p>
@@ -378,21 +413,6 @@ export default function Home() {
                 </div>
               ))}
             </div>
-          </div>
-        </Section>
-
-        <Section id="resources" className="space-y-8">
-          <div className="space-y-3 text-center">
-            <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">Popular Subjects</h2>
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {SUBJECTS.map((subject) => (
-              <div key={subject} className="rounded-[20px] border border-[#E2E8F0] bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-                <h3 className="text-lg font-semibold">{subject}</h3>
-                <p className="mt-3 text-sm text-[#64748B]">Notes • PYQs • Quiz</p>
-              </div>
-            ))}
           </div>
         </Section>
 
@@ -443,7 +463,7 @@ export default function Home() {
                 <p className="mt-2 text-3xl font-semibold">{plan.price}</p>
                 <ul className="mt-4 space-y-2 text-sm text-[#64748B]">
                   {plan.items.map((item) => (
-                    <li key={item} className="flex items-start gap-2"><FaCircleCheck className="mt-0.5 text-[#22C55E]" /> {item}</li>
+                    <li key={item} className="flex items-start gap-2"><CheckCircle2 className="mt-0.5 text-[#22C55E]" size={16} /> {item}</li>
                   ))}
                 </ul>
               </div>
@@ -457,7 +477,7 @@ export default function Home() {
           </div>
         </Section>
 
-        <Section className="space-y-8">
+        <Section id="testimonials" className="space-y-8">
           <div className="space-y-3 text-center">
             <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">Testimonials</h2>
           </div>
@@ -500,7 +520,7 @@ export default function Home() {
           </div>
         </Section>
 
-        <Section className="space-y-8">
+        <Section id="faqs" className="space-y-8">
           <div className="space-y-3 text-center">
             <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">FAQ</h2>
           </div>
@@ -513,11 +533,12 @@ export default function Home() {
                   className="flex w-full items-center justify-between gap-3 text-left"
                 >
                   <span className="flex items-center gap-2 text-sm font-semibold sm:text-base">
-                    <FaRegCircleQuestion className="text-[#4F46E5]" />
+                    <HelpCircle className="text-[#4F46E5]" size={18} />
                     {faq.question}
                   </span>
-                  <FaChevronDown
+                  <ChevronDown
                     className={`shrink-0 text-[#64748B] transition ${openFaq === index ? "rotate-180" : ""}`}
+                    size={18}
                   />
                 </button>
                 {openFaq === index && <p className="mt-3 text-sm leading-7 text-[#64748B]">{faq.answer}</p>}
@@ -527,15 +548,16 @@ export default function Home() {
         </Section>
 
         <Section>
-          <div className="rounded-[24px] bg-gradient-to-r from-slate-950 via-indigo-900 to-slate-900 px-6 py-14 text-center text-white shadow-2xl shadow-indigo-900/30 md:px-10">
+          <div className="rounded-3xl bg-linear-to-r from-slate-950 via-indigo-900 to-slate-900 px-6 py-14 text-center text-white shadow-2xl shadow-indigo-900/30 md:px-10">
             <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">Ready To Ace Your Semester?</h2>
             <p className="mx-auto mt-4 max-w-2xl text-sm text-indigo-100 md:text-base">
               Everything you need to learn, revise and score better.
             </p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-              <Link href="/auth/google" className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition hover:-translate-y-0.5">
+              <button
+              onClick={handleSignIn} className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition hover:-translate-y-0.5">
                 Get Started Free
-              </Link>
+              </button>
               <a href="#universities" className="rounded-full border border-white/40 px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white/10">
                 Explore Universities
               </a>
@@ -544,23 +566,22 @@ export default function Home() {
         </Section>
       </div>
 
+      <div className="mx-auto max-w-7xl px-6 py-12 text-center text-sm text-[#64748B]">
+        Note: Some features may be in development and subject availability may vary. We’re continuously adding more universities, subjects and features based on student feedback. Stay tuned for updates! 
+      </div>
+
       <footer className="border-t border-[#E2E8F0] bg-[#F8FAFC]">
         <div className="mx-auto grid max-w-7xl gap-10 px-6 py-12 text-sm text-[#64748B] md:grid-cols-5">
           <div className="md:col-span-1">
-            <h3 className="text-lg font-semibold text-[#0F172A]">Studyit</h3>
-            <p className="mt-2">University-specific learning SaaS for focused semester prep.</p>
+            <h3 className="text-lg font-semibold text-[#0F172A]">Studyit.in</h3>
+            <p className="mt-2">University-specific learning platform for semester prep.</p>
           </div>
 
-          {[
-            ["Product", ["Features", "Pricing", "AI Tutor"]],
-            ["Resources", ["Universities", "Notes", "PYQs"]],
-            ["Company", ["About", "Contact"]],
-            ["Legal", ["Privacy Policy", "Terms"]],
-          ].map(([title, items]) => (
+          {FOOTER_LINKS.map(([title, items]) => (
             <div key={title}>
               <h4 className="font-semibold text-[#0F172A]">{title}</h4>
               <ul className="mt-3 space-y-2">
-                {(items as string[]).map((item) => (
+                {items.map((item) => (
                   <li key={item}>
                     <a href="#" className="transition hover:text-[#4F46E5]">{item}</a>
                   </li>
@@ -569,7 +590,7 @@ export default function Home() {
             </div>
           ))}
         </div>
-        <div className="border-t border-[#E2E8F0] px-6 py-5 text-center text-xs text-[#64748B]">© 2026 Studyit. All rights reserved.</div>
+        <div className="border-t border-[#E2E8F0] px-6 py-5 text-center text-xs text-[#64748B]">© 2026 Studyit.in. All rights reserved.</div>
       </footer>
     </main>
   );

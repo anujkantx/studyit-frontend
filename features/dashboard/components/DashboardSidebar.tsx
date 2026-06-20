@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 
 import Image from "next/image";
-import logo from "@/public/images/White-logo.png";
+import logo from "@/public/images/studyit-logo-transparent.png";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -53,13 +53,11 @@ export default function DashboardSidebar({ mobile = false, onNavigate }: Sidebar
           <div className="flex items-center gap-3">
             <Image
               src={logo}
-              alt="QuantX"
-              width={32}
-              height={32}
-              className="rounded-md"
+              alt="Studyit"
+              className="rounded-md w-6 h-6"
             />
             <h1 className="text-(--foreground) text-lg font-semibold tracking-wide">
-              QuantX
+              Studyit
             </h1>
           </div>
         )}
@@ -82,7 +80,7 @@ export default function DashboardSidebar({ mobile = false, onNavigate }: Sidebar
       <nav className="flex flex-col px-2 space-y-2">
         {navItems.map((item) => {
           const Icon = item.icon;
-          const isActive = pathname.startsWith(item.path);
+          const isActive = pathname === item.path || (item.path !== "/dashboard" && pathname.startsWith(item.path));
 
           return (
             <Link

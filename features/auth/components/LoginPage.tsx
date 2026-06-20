@@ -15,7 +15,6 @@ export default function LoginPage() {
       setMessage("Google authentication failed.");
       return;
     }
-    // console.log("Google login response:", response);
 
     setLoading(true);
     setMessage("");
