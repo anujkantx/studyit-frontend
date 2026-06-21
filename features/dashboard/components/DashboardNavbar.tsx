@@ -1,12 +1,26 @@
 "use client";
 
-import { useState } from "react";
-import { Bell } from "lucide-react";
+import { User } from "@/features/dashboard/types/user";
+import { Bell, Search, Crown } from "lucide-react";
 import Image from "next/image";
-import Avtar from "@/public/images/avatar.jpg";
+import { useMemo } from "react";
 
-const DashboardNavbar = ({ user }: { user: string }) => {
-  const [formattedDate] = useState(
+interface DashboardNavbarProps {
+  user: User | null;
+}
+
+export default function DashboardNavbar({
+  user,
+}: DashboardNavbarProps) {
+  const greeting = useMemo(() => {
+    const hour = new Date().getHours();
+
+    if (hour < 12) return "Good Morning";
+    if (hour < 18) return "Good Afternoon";
+    return "Good Evening";
+  }, []);
+
+  const formattedDate = useMemo(
     () =>
       new Date().toLocaleDateString("en-US", {
         weekday: "long",
@@ -14,51 +28,96 @@ const DashboardNavbar = ({ user }: { user: string }) => {
         month: "long",
         day: "numeric",
       }),
+    [],
   );
 
   return (
-    <div className="flex justify-between items-center">
+    <header className="flex items-center justify-between gap-4 border-b border-(--border) bg-(--background) px-6 py-4">
       
-      {/* Left Side */}
-      <div className="flex items-center gap-2 sm:gap-3">
+      {/* LEFT */}
+      <div className="min-w-0">
+        <h1 className="text-xl font-bold truncate">
+          {greeting}, {user?.name}
+        </h1>
 
-        <div className="">
-          <h1 className="text-base sm:text-lg md:text-xl font-bold leading-tight truncate">Welcome back! {user}</h1>
-          <p className="text-[10px] sm:text-xs text-(--muted) font-medium truncate" suppressHydrationWarning>
-            {formattedDate}
-          </p>
+        <p
+          className="text-sm text-(--muted)"
+          suppressHydrationWarning
+        >
+          {formattedDate}
+        </p>
+      </div>
+
+      {/* CENTER SEARCH */}
+      <div className="hidden lg:flex flex-1 max-w-xl mx-8">
+        <div className="relative w-full">
+          <Search
+            size={18}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-(--muted)"
+          />
+
+          <input
+            type="text"
+            placeholder="Search notes, PYQs, quizzes..."
+            className="
+              w-full
+              rounded-xl
+              border
+              border-(--border)
+              bg-transparent
+              py-2.5
+              pl-10
+              pr-4
+              outline-none
+              focus:ring-2
+              focus:ring-blue-500
+            "
+          />
         </div>
       </div>
 
-      {/* Right Side */}
-      <div className="flex items-center gap-1 sm:gap-2 md:gap-3">
+      {/* RIGHT */}
+      <div className="flex items-center gap-3">
         
-        {/* Notification Bell */}
-        <button className="p-1.5 rounded-lg hover:bg-black/5 dark:hover:bg-white/10 transition relative group">
-          <Bell size={18} className="text-(--muted) group-hover:text-(--foreground) transition" />
-          <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+        {/* PLAN BADGE */}
+        <div className="hidden md:flex items-center gap-1 rounded-full border border-yellow-500/30 bg-yellow-500/10 px-3 py-1">
+          <Crown size={14} />
+          <span className="text-xs font-medium">
+            {user?.role?.name === "student"
+              ? "Student"
+              : user?.role?.name}
+          </span>
+        </div>
+
+        {/* NOTIFICATION */}
+        <button className="relative rounded-xl p-2 hover:bg-black/5 dark:hover:bg-white/10 transition">
+          <Bell size={20} />
+
+          <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500" />
         </button>
 
-        {/* User Avatar with Dropdown */}
-        <div className="flex items-center gap-2 pl-2 border-l border-(--border)">
-          <div className="text-right hidden md:block">
-            <p className="text-xs font-semibold">{user}</p>
-            <p className="text-xs text-(--muted)">Pro Member</p>
+        {/* USER */}
+        <div className="flex items-center gap-3 border-l border-(--border) pl-3">
+          
+          <div className="hidden md:block text-right">
+            <p className="text-sm font-semibold">
+              {user?.name}
+            </p>
+
+            <p className="text-xs text-(--muted)">
+              {user?.role?.name}
+            </p>
           </div>
-          <div className="rounded-full overflow-hidden hover:ring-2 ring-blue-500 transition cursor-pointer">
-            <Image
-              src={Avtar}
-              alt="User Avatar"
-              width={34}
-              height={34}
-              className="rounded-full"
-            />
-          </div>
+
+          <Image
+            src={user?.avatar_url || "/images/avatar.jpg"}
+            alt={user?.name || "User"}
+            width={40}
+            height={40}
+            className="rounded-full object-cover"
+          />
         </div>
-
       </div>
-    </div>
+    </header>
   );
-};
-
-export default DashboardNavbar;
+}

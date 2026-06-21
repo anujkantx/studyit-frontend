@@ -6,10 +6,10 @@ import {
   LayoutDashboard,
   FileText,
   Calendar,
-  Bot,
   CheckSquare,
   ChevronLeft,
   ChevronRight,
+  GraduationCap,
 } from "lucide-react";
 
 import Image from "next/image";
@@ -31,9 +31,9 @@ export default function DashboardSidebar({ mobile = false, onNavigate }: Sidebar
 
   const navItems = [
     { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
-    { name: "Universities", path: "/dashboard/university", icon: Bot },
+    { name: "Universities", path: "/dashboard/university", icon: GraduationCap },
     { name: "PYQ", path: "/dashboard/pyq", icon: CheckSquare },
-    { name: "QUIZ", path: "/dashboard/quiz", icon: Calendar },
+    { name: "Quiz", path: "/dashboard/quiz", icon: Calendar },
     { name: "Notes", path: "/dashboard/notes", icon: FileText },
   ];
 
@@ -76,6 +76,14 @@ export default function DashboardSidebar({ mobile = false, onNavigate }: Sidebar
         )}
       </div>
 
+      {expanded && (
+  <div className="px-4 pb-2">
+    <p className="text-[11px] uppercase tracking-widest text-(--muted) font-semibold">
+      Main Menu
+    </p>
+  </div>
+)}
+
       {/* Navigation */}
       <nav className="flex flex-col px-2 space-y-2">
         {navItems.map((item) => {
@@ -90,11 +98,12 @@ export default function DashboardSidebar({ mobile = false, onNavigate }: Sidebar
               className={`
                 group relative flex items-center
                 ${expanded ? "px-4" : "px-3"}
-                h-11 rounded-lg
+                h-11 rounded-xl
                 transition-all duration-200
+                hover:translate-x-1
                 ${
                   isActive
-                    ? "bg-black/10 dark:bg-white/10 text-(--foreground) border border-(--border)"
+                    ? "bg-blue-500/10 text-blue-500 border border-blue-500/20"
                     : "text-(--muted) hover:text-(--foreground) hover:bg-black/5 dark:hover:bg-white/5"
                 }
               `}
@@ -128,6 +137,8 @@ export default function DashboardSidebar({ mobile = false, onNavigate }: Sidebar
           );
         })}
       </nav>
+
+      
 
       {/* Bottom Section */}
       <div className="mt-auto pb-6 px-3 flex flex-col items-center space-y-3">
