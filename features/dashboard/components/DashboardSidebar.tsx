@@ -12,6 +12,7 @@ import {
   GraduationCap,
 } from "lucide-react";
 
+
 import Image from "next/image";
 import logo from "@/public/images/studyit-logo-transparent.png";
 
@@ -24,7 +25,8 @@ type SidebarProps = {
   onNavigate?: () => void;
 };
 
-export default function DashboardSidebar({ mobile = false, onNavigate }: SidebarProps) {
+export default function DashboardSidebar({ 
+  mobile = false, onNavigate }: SidebarProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const pathname = usePathname();
   const expanded = mobile ? true : isExpanded;
@@ -36,6 +38,19 @@ export default function DashboardSidebar({ mobile = false, onNavigate }: Sidebar
     { name: "Quiz", path: "/dashboard/quiz", icon: Calendar },
     { name: "Notes", path: "/dashboard/notes", icon: FileText },
   ];
+
+  const logout = async () => {
+    try {
+      await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      window.location.href = "/auth/google";
+    }
+  };
 
   return (
     <div
@@ -181,6 +196,7 @@ export default function DashboardSidebar({ mobile = false, onNavigate }: Sidebar
 
         {/* Logout */}
         <button
+          onClick={logout}
           className={`
             group relative flex items-center
             ${expanded ? "justify-start w-full px-4" : "justify-center w-11"}

@@ -21,20 +21,47 @@ export default function DashboardLayout({
   useEffect(() => {
     const fetchMe = async () => {
       try {
-        const res = await fetch(
+        let res = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/me`,
           {
             credentials: "include",
           }
         );
-
+  
+        // Access token expired
+        if (res.status === 401) {
+  
+          const refreshRes = await fetch(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/refresh`,
+            {
+              method: "POST",
+              credentials: "include",
+            }
+          );
+  
+          if (!refreshRes.ok) {
+            router.replace("/auth/google");
+            return;
+          }
+  
+          // Retry /me
+          res = await fetch(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/me`,
+            {
+              credentials: "include",
+            }
+          );
+        }
+  
         if (!res.ok) {
           router.replace("/auth/google");
           return;
         }
-
+  
         const data: User = await res.json();
+  
         setUser(data);
+  
       } catch (error) {
         console.error("Auth Error:", error);
         router.replace("/auth/google");
@@ -42,7 +69,7 @@ export default function DashboardLayout({
         setLoading(false);
       }
     };
-
+  
     fetchMe();
   }, [router]);
 
