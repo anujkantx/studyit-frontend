@@ -1,3 +1,15 @@
 @import "tailwindcss";
 
+:root {
+  --font-sans: "Inter", sans-serif;
+  --font-mono: "Fira Code", monospace;
+  --font-display: "Oswald", sans-serif;
+  --font-body: "Open Sans", sans-serif;
+
+  --primary: #2563eb;
+  --secondary: #1E293B;
+  --background: #F8FAFC;
+  --border: #E5E7EB
+  --accent: #f59e0b;
+}
 

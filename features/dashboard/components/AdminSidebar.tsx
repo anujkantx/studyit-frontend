@@ -13,7 +13,8 @@ import {
 } from "lucide-react";
 
 
-import Logo from "@/shared/components/Logo";
+import Image from "next/image";
+import logo from "@/public/images/studyit-logo-transparent.png";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -65,7 +66,14 @@ export default function DashboardSidebar({
       <div className="p-4 flex items-center justify-between">
         {expanded && (
           <div className="flex items-center gap-3">
-            <Logo variant="wordmark" />
+            <Image
+              src={logo}
+              alt="Studyit"
+              className="rounded-md w-6 h-6"
+            />
+            <h1 className="text-(--foreground) text-lg font-semibold tracking-wide">
+              Studyit
+            </h1>
           </div>
         )}
 

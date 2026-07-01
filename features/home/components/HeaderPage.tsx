@@ -1,17 +1,12 @@
 
 import Link from 'next/link'
-import Image from 'next/image'
-import Logo from '@/public/images/studyit-logo-transparent.png'
+import Logo from '@/shared/components/Logo'
 const HeaderPage = () => {
   return (
     <header className="sticky top-0 z-50 border-b border-[#E2E8F0] bg-white/80 backdrop-blur-xl">
     <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
       <Link href="/" className="text-2xl flex font-semibold tracking-tight text-[#0F172A]">
-        <Image src={Logo} alt="Studyit Logo" className="h-8 w-8" />
-        <div className="ml-2 font-bold text-[#483ffe]">
-          Studyit
-        </div>
-
+        <Logo variant="wordmark" />
       </Link>
 
       <nav className="hidden items-center gap-8 text-sm font-medium md:flex">

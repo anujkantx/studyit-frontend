@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import SubscriptionCard from "@/shared/components/dashboard/SubscriptionCard";
 
 export default function DashboardPage() {
   const [university, setUniversity] = useState("");
@@ -18,39 +19,8 @@ export default function DashboardPage() {
   return (
     <div className="p-6">
       <div className="grid gap-6 lg:grid-cols-4">
-
-        {/* Subscription Card */}
-        <div className="rounded-xl border bg-white p-5 shadow-sm">
-          <h2 className="text-lg font-semibold">
-            Active Subscription
-          </h2>
-
-          <div className="mt-4 space-y-2">
-            <p className="font-medium">Premium Plan</p>
-            <p className="text-sm text-gray-500">
-              AKTU
-            </p>
-            <p className="text-sm text-gray-500">
-              B.Tech CSE
-            </p>
-            <p className="text-sm text-gray-500">
-              Semester 4
-            </p>
-          </div>
-
-          <div className="mt-4">
-            <p className="text-sm text-gray-500">
-              Expires On
-            </p>
-            <p className="font-medium">
-              12 Jan 2027
-            </p>
-          </div>
-
-          <button className="mt-4 w-full rounded-lg border px-4 py-2">
-            Manage Plan
-          </button>
-        </div>
+        <SubscriptionCard />
+        
 
         {/* Selection Section */}
         <div className="rounded-xl border bg-white p-5 shadow-sm lg:col-span-3">
